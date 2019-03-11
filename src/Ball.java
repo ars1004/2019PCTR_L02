@@ -1,7 +1,6 @@
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-//TODO Transform the code to be used safely in a concurrent context.  
 public class Ball {
 	private String Ball = "Ball.png";
 
@@ -23,7 +22,7 @@ public class Ball {
 		fi = Math.random() * Math.PI * 2;
 	}
 
-	public void move() {
+	public synchronized void move() {
 		v = v * Math.exp(-v / 1000);
 		dx = v * Math.cos(fi);
 		dy = v * Math.sin(fi);
@@ -36,8 +35,9 @@ public class Ball {
 
 		reflect();
 
-		assert x < Board.RIGHTBOARD && x > Board.LEFTBOARD: "Fallo postcondicion x";
-		assert y < Board.BOTTOMBOARD && y > Board.TOPBOARD: "Fallo postcondicion y";
+		assert x < Board.RIGHTBOARD && x > Board.LEFTBOARD : "Fallo postcondicion x";
+		assert y < Board.BOTTOMBOARD && y > Board.TOPBOARD : "Fallo postcondicion y";
+
 	}
 
 	private void reflect() {

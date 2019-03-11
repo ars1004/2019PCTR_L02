@@ -36,7 +36,8 @@ public class Ball {
 
 		reflect();
 
-		// TODO Check postcondition
+		assert x < Board.RIGHTBOARD && x > Board.LEFTBOARD: "Fallo postcondicion x";
+		assert y < Board.BOTTOMBOARD && y > Board.TOPBOARD: "Fallo postcondicion y";
 	}
 
 	private void reflect() {

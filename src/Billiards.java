@@ -21,6 +21,9 @@ public class Billiards extends JFrame {
 	private final int N_BALL = 5;
 	private Ball[] balls;
 
+	private Thread[] hilos;
+	boolean running;
+
 	public Billiards() {
 
 		board = new Board();
@@ -52,7 +55,37 @@ public class Billiards extends JFrame {
 	}
 
 	private void initBalls() {
-		// TODO init balls
+		balls = new Ball[N_BALL + 3];
+		hilos = new Thread[N_BALL + 3];
+		for (int i = 0; i < N_BALL + 3; i++) {
+			balls[i] = new Ball();
+		}
+
+		for (int i = 0; i < N_BALL + 3; i++) {
+			hilos[i] = makeThread(balls[i]);
+			hilos[i].start();
+		}
+
+		board.setBalls(balls);
+	}
+
+	protected Thread makeThread(final Ball b) {
+		Runnable runloop = new Runnable() {
+			public void run() {
+				try {
+					for (;;) {
+						if (running) {
+							b.move();
+							board.paint(getGraphics());
+						}
+						Thread.sleep(16);
+					}
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		};
+		return new Thread(runloop);
 	}
 
 	private class StartListener implements ActionListener {
